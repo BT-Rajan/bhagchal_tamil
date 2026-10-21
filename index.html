@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aadu Puli Aatam – ஆடு புலி ஆட்டம்</title>
+<style>
+:root{--bg:#f6efe3;--fg:#2b1d12;--muted:#6f5d49;--card:#fffaf1;--bd:#d9c7a8;--acc:#9b3a1a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17110c;--fg:#f3e9dc;--muted:#bba98f;--card:#241a13;--bd:#4a3827;--acc:#e8a05a}}
+:root[data-theme="dark"]{--bg:#17110c;--fg:#f3e9dc;--muted:#bba98f;--card:#241a13;--bd:#4a3827;--acc:#e8a05a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Georgia,"Noto Serif Tamil","Latha",serif;display:flex;flex-direction:column;align-items:center;padding:14px 12px 28px}
+header{text-align:center}
+h1{font-size:1.7rem;margin:2px 0;letter-spacing:.5px}
+header p{margin:0;color:var(--muted);font-size:.95rem}
+.wrap{width:100%;max-width:520px}
+.panel{display:flex;gap:8px;margin:12px 0 8px}
+.card{flex:1;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 10px;font-family:system-ui,sans-serif;font-size:.82rem;display:flex;align-items:center;gap:8px}
+.card b{display:block;font-size:.95rem}
+.pips{display:flex;gap:4px;margin-top:3px}
+.pip{width:11px;height:11px;border-radius:50%;border:1.5px solid var(--acc);display:inline-block}
+.pip.on{background:var(--acc)}
+.ico{width:34px;height:34px;flex:none}
+#st{font-family:system-ui,sans-serif;text-align:center;font-weight:600;min-height:2.6em;margin:4px 0 8px;display:flex;align-items:center;justify-content:center}
+.board{position:relative}
+svg#bd{display:block;width:100%;height:auto;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.35),0 2px 0 rgba(255,255,255,.25) inset}
+#ov{position:absolute;inset:0;border-radius:20px;background:rgba(20,10,4,.72);display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#fff;text-align:center;padding:20px;font-family:system-ui,sans-serif}
+#ov h2{margin:0;font-size:1.6rem;font-family:Georgia,serif}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:10px 0;font-family:system-ui,sans-serif}
+button,select{font:inherit;font-size:.88rem;padding:7px 13px;border-radius:9px;border:1px solid var(--bd);background:var(--card);color:var(--fg);cursor:pointer}
+button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+button.pri{background:var(--acc);color:#fff;border-color:var(--acc)}
+details{font-family:system-ui,sans-serif;font-size:.86rem;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:10px 14px;margin-top:8px;color:var(--muted)}
+summary{cursor:pointer;color:var(--fg);font-weight:600}
+details li{margin:4px 0}
+.slide{animation:sl .38s cubic-bezier(.3,.8,.3,1)}
+@keyframes sl{from{transform:translate(var(--dx),var(--dy))}to{transform:translate(0,0)}}
+.drop{animation:dr .3s ease-out;transform-box:fill-box;transform-origin:center}
+@keyframes dr{from{transform:scale(1.8);opacity:0}to{transform:scale(1);opacity:1}}
+.ghost{animation:gh .6s ease-out forwards;transform-box:fill-box;transform-origin:center;pointer-events:none}
+@keyframes gh{to{transform:scale(1.6);opacity:0}}
+.pulse{animation:pu 1s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pu{50%{transform:scale(1.25);opacity:.7}}
+@media (prefers-reduced-motion:reduce){.slide,.drop,.ghost,.pulse{animation:none}}
+</style></head><body>
+<header><h1>ஆடு புலி ஆட்டம்</h1><p>Aadu Puli Aatam · The Goat &amp; Tiger Game of Tamil Nadu</p></header>
+<div class="wrap">
+ <div class="panel">
+  <div class="card"><svg class="ico" viewBox="-20 -24 40 46"><use href="#goat"/></svg><div><b>Aadus <span id="hand">15</span> to place</b><span id="lost"></span></div></div>
+  <div class="card"><svg class="ico" viewBox="-22 -22 44 44"><use href="#tiger"/></svg><div><b>Pulis: captured <span id="cap">0</span>/5</b><div class="pips" id="pips"></div></div></div>
+ </div>
+ <div id="st"></div>
+ <div class="board"><svg id="bd" viewBox="0 0 400 330" role="img" aria-label="Aadu Puli Aatam board"></svg>
+  <div id="ov"><h2 id="ovt"></h2><div id="ovs"></div><button class="pri" id="again">Play again</button></div></div>
+ <div class="ctl">
+  <button id="bG" class="on">Play Aadu 🐐</button><button id="bT">Play Puli 🐅</button>
+  <select id="lv" aria-label="Difficulty"><option value="1">Easy</option><option value="3" selected>Medium</option><option value="4">Hard</option></select>
+  <button id="un">↶ Undo</button><button id="sn">🔊 Sound</button><button id="nw">New game</button>
+ </div>
+ <details><summary>Rules · விதிகள்</summary><ul>
+  <li><b>Setup:</b> 3 pulis (tigers) start on the apex and the two points just below it. 15 aadus (goats) start off the board.</li>
+  <li><b>Aadus move first</b> by placing one goat on any empty point. Goats cannot move until all 15 are placed; then they slide one step along a line.</li>
+  <li><b>Pulis</b> step to an adjacent empty point, or capture by jumping over one adjacent goat in a straight line onto an empty point, one goat per jump. They cannot jump other pulis.</li>
+  <li><b>Winning:</b> pulis win by capturing 5 aadus. Aadus win by blocking all three pulis so none can move.</li>
+ </ul></details>
+</div>
+<script>
+const NS='http://www.w3.org/2000/svg';
+const ROWY=[125,180,238,298],AX=200,AY=30,K=72/268;
+const XY=[[AX,AY]];
+for(let r=0;r<4;r++)for(let c=0;c<5;c++)XY.push([AX+(c-2)*K*(ROWY[r]-AY),ROWY[r]]);
+const LINES=[];
+for(let r=0;r<4;r++)LINES.push([0,1,2,3,4].map(c=>1+r*5+c));
+for(let c=0;c<5;c++)LINES.push([0,1+c,6+c,11+c,16+c]);
+const ADJ=XY.map(()=>[]),JUMPS=XY.map(()=>[]);
+for(const l of LINES){
+ for(let i=0;i<l.length-1;i++){ADJ[l[i]].push(l[i+1]);ADJ[l[i+1]].push(l[i]);}
+ for(let i=0;i<l.length-2;i++){JUMPS[l[i]].push([l[i+1],l[i+2]]);JUMPS[l[i+2]].push([l[i+1],l[i]]);}
+}
+const GOAT=1,TIGER=2;
+const newState=()=>{const b=Array(21).fill(0);b[0]=b[7]=b[9]=TIGER;return{b,hand:15,cap:0,turn:'G'};};
+function moves(s){
+ const m=[],b=s.b;
+ if(s.turn==='G'){
+  if(s.hand>0){for(let i=0;i<21;i++)if(!b[i])m.push({f:-1,t:i});}
+  else for(let i=0;i<21;i++)if(b[i]===GOAT)for(const j of ADJ[i])if(!b[j])m.push({f:i,t:j});
+ }else for(let i=0;i<21;i++)if(b[i]===TIGER){
+  for(const j of ADJ[i])if(!b[j])m.push({f:i,t:j});
+  for(const[o,l]of JUMPS[i])if(b[o]===GOAT&&!b[l])m.push({f:i,t:l,o});
+ }
+ return m;
+}
+function apply(s,m){
+ const b=s.b.slice();let hand=s.hand,cap=s.cap;
+ if(s.turn==='G'){if(m.f<0)hand--;else b[m.f]=0;b[m.t]=GOAT;}
+ else{b[m.f]=0;b[m.t]=TIGER;if(m.o!==undefined){b[m.o]=0;cap++;}}
+ return{b,hand,cap,turn:s.turn==='G'?'T':'G'};
+}
+function result(s){
+ if(s.cap>=5)return'T';
+ if(!moves(s).length)return s.turn==='T'?'G':'T';
+ return null;
+}
+function evalS(s){
+ const r=result(s);if(r==='T')return 1e4;if(r==='G')return-1e4;
+ const t=moves({...s,turn:'T'});
+ return s.cap*80+t.length*5+t.filter(x=>x.o!==undefined).length*25;
+}
+function mm(s,d,a,b){
+ if(d===0||result(s))return evalS(s);
+ const ms=moves(s);
+ if(s.turn==='T'){let v=-1e9;for(const m of ms){v=Math.max(v,mm(apply(s,m),d-1,a,b));a=Math.max(a,v);if(a>=b)break;}return v;}
+ let v=1e9;for(const m of ms){v=Math.min(v,mm(apply(s,m),d-1,a,b));b=Math.min(b,v);if(a>=b)break;}return v;
+}
+function aiMove(s,d){
+ let best=null,bv=s.turn==='T'?-1e9:1e9;
+ for(const m of moves(s)){
+  const v=d<=1?evalS(apply(s,m))+Math.random()*30:mm(apply(s,m),d-1,-1e9,1e9)+Math.random();
+  if(s.turn==='T'?v>bv:v<bv){bv=v;best=m;}
+ }
+ return best;
+}
+// ---- audio
+let AC=null,snd=true;
+function tone(f,d=.09,t='sine',at=0){if(!snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain(),n=AC.currentTime+at;o.type=t;o.frequency.value=f;g.gain.setValueAtTime(.09,n);g.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(g);g.connect(AC.destination);o.start(n);o.stop(n+d);}catch(e){}}
+function sfx(m,end){
+ if(end){[392,494,587,784].forEach((f,i)=>tone(f,.18,'triangle',i*.12));return;}
+ if(m.o!==undefined){tone(170,.25,'sawtooth');tone(110,.3,'sawtooth',.08);}
+ else if(m.f<0)tone(560,.07,'triangle');else tone(420,.07,'triangle');
+}
+// ---- art
+function defs(){return `<defs>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d9a05b"/><stop offset=".5" stop-color="#c0813f"/><stop offset="1" stop-color="#a86a2c"/></linearGradient>
+<filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.35" numOctaves="3" seed="4"/><feColorMatrix values="0 0 0 0 .25  0 0 0 0 .13  0 0 0 0 .04  0 0 0 .55 0"/></filter>
+<radialGradient id="gT" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#ffc05a"/><stop offset=".6" stop-color="#ec8a10"/><stop offset="1" stop-color="#b85c00"/></radialGradient>
+<radialGradient id="gG" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#fffdf6"/><stop offset=".65" stop-color="#eadfc6"/><stop offset="1" stop-color="#b9a883"/></radialGradient>
+<radialGradient id="pt" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#6b4020"/><stop offset="1" stop-color="#2a1608"/></radialGradient>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="1.5" dy="3" stdDeviation="2" flood-color="#000" flood-opacity=".5"/></filter>
+<g id="tiger"><circle cx="-12" cy="-12" r="5.5" fill="#d9780a" stroke="#4d2400" stroke-width="1.3"/><circle cx="12" cy="-12" r="5.5" fill="#d9780a" stroke="#4d2400" stroke-width="1.3"/>
+<circle r="17.5" fill="url(#gT)" stroke="#4d2400" stroke-width="1.6"/>
+<path d="M-4-16.5L-2-9M4-16.5L2-9M0-17.5V-11M-17-3L-11-2M17-3L11-2M-15 6L-10 4M15 6L10 4" stroke="#2a1300" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+<ellipse cy="8" rx="8" ry="6" fill="#fff1d6"/><circle cx="-6.5" cy="-3" r="2.3" fill="#1b0f00"/><circle cx="6.5" cy="-3" r="2.3" fill="#1b0f00"/>
+<path d="M-3 4.5H3L0 8.5Z" fill="#3a1a10"/><path d="M0 8.5V11M-3 12Q0 14 3 12" stroke="#3a1a10" stroke-width="1.2" fill="none"/></g>
+<g id="goat"><path d="M-7-12Q-13-23-18-14M7-12Q13-23 18-14" stroke="#6b4e26" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+<ellipse cx="-16" cy="-3" rx="6" ry="3" fill="#d8cbb0" stroke="#7a6a4a" stroke-width="1.2" transform="rotate(25 -16 -3)"/><ellipse cx="16" cy="-3" rx="6" ry="3" fill="#d8cbb0" stroke="#7a6a4a" stroke-width="1.2" transform="rotate(-25 16 -3)"/>
+<path d="M-3 12Q0 24 3 12Z" fill="#efe6d2" stroke="#7a6a4a" stroke-width="1.2"/>
+<ellipse rx="13" ry="15" fill="url(#gG)" stroke="#7a6a4a" stroke-width="1.6"/>
+<circle cx="-5" cy="-4" r="2" fill="#1b1208"/><circle cx="5" cy="-4" r="2" fill="#1b1208"/><ellipse cy="7" rx="6" ry="4.5" fill="#f2dfc6"/><circle cx="-2" cy="7" r="1" fill="#5b3a28"/><circle cx="2" cy="7" r="1" fill="#5b3a28"/></g>
+</defs>`;}
+const sv=document.getElementById('bd'),$=id=>document.getElementById(id);
+let S,human='G',sel=null,busy=false,last=null,hist=[];
+function render(){
+ let h=defs()+`<rect width="400" height="330" fill="url(#wood)"/><rect width="400" height="330" filter="url(#grain)" opacity=".6"/><rect x="5" y="5" width="390" height="320" rx="16" fill="none" stroke="#5a3210" stroke-opacity=".55" stroke-width="3"/>`;
+ const pts=l=>l.map(i=>XY[i].map(n=>n.toFixed(1)).join(',')).join(' ');
+ for(const l of LINES)h+=`<polyline points="${pts(l)}" fill="none" stroke="#fff3d0" stroke-opacity=".35" stroke-width="5" transform="translate(0 1.2)" stroke-linejoin="round"/>`;
+ for(const l of LINES)h+=`<polyline points="${pts(l)}" fill="none" stroke="#3a1c08" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>`;
+ const over=result(S),ms=!over&&S.turn===human&&!busy?moves(S):[];
+ const tg=new Map();
+ if(S.turn==='G'&&S.hand>0)ms.forEach(m=>tg.set(m.t,0));else ms.filter(m=>m.f===sel).forEach(m=>tg.set(m.t,m.o!==undefined?1:0));
+ for(let i=0;i<21;i++){const[x,y]=XY[i];h+=`<circle cx="${x}" cy="${y}" r="6.5" fill="url(#pt)" stroke="#f0d9a8" stroke-opacity=".5" stroke-width="1"/>`;}
+ const movable=new Set(ms.filter(m=>m.f>=0).map(m=>m.f));
+ for(let i=0;i<21;i++){
+  const v=S.b[i];if(!v)continue;const[x,y]=XY[i];let a='';
+  if(last&&last.t===i&&!(last.f<0)){const[fx,fy]=XY[last.f];a=`class="slide" style="--dx:${fx-x}px;--dy:${fy-y}px"`;}
+  else if(last&&last.t===i)a='class="drop"';
+  h+=`<g transform="translate(${x} ${y})"><g filter="url(#sh)"><g ${a}><use href="#${v===GOAT?'goat':'tiger'}"/></g></g></g>`;
+  if(i===sel)h+=`<circle cx="${x}" cy="${y}" r="22" fill="none" stroke="#7cf08a" stroke-width="3.5" class="pulse"/>`;
+  else if(movable.has(i)&&sel===null)h+=`<circle cx="${x}" cy="${y}" r="21" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-dasharray="3 4"/>`;
+ }
+ if(last&&last.o!==undefined){const[x,y]=XY[last.o];h+=`<g transform="translate(${x} ${y})"><g class="ghost"><use href="#goat"/></g></g>`;}
+ for(const[i,cap]of tg){const[x,y]=XY[i];h+=`<circle cx="${x}" cy="${y}" r="${cap?13:9}" fill="${cap?'#ff4d3d':'#7cf08a'}" fill-opacity=".6" stroke="#fff" stroke-width="2.5" class="pulse"/>`;}
+ for(let i=0;i<21;i++){const[x,y]=XY[i];h+=`<circle cx="${x}" cy="${y}" r="22" fill="transparent" data-i="${i}" style="cursor:pointer"/>`;}
+ sv.innerHTML=h;
+ $('hand').textContent=S.hand;$('cap').textContent=S.cap;
+ $('pips').innerHTML=[0,1,2,3,4].map(i=>`<span class="pip${i<S.cap?' on':''}"></span>`).join('');
+ $('lost').textContent=S.cap?`${S.cap} lost · ${15-S.hand-S.cap} on board`:`${15-S.hand} on board`;
+ const o=$('ov');
+ if(over){const w=over==='T'===(human==='T');$('ovt').textContent=over==='T'?'புலி வென்றது · Pulis win':'ஆடு வென்றது · Aadus win';$('ovs').textContent=w?'Well played, you won! 🎉':'The computer won this round.';o.style.display='flex';$('st').textContent='Game over';}
+ else{o.style.display='none';$('st').textContent=S.turn===human?(S.turn==='G'&&S.hand>0?'Your turn: place an aadu on any empty point':S.turn==='G'?'Your turn: slide an aadu one step':sel===null?'Your turn: select a puli':'Choose a green point (red = capture)'):'Computer is thinking…';}
+}
+function finish(m){last=m;render();const r=result(S);sfx(m,!!r);}
+function play(m){hist.push(S);S=apply(S,m);sel=null;finish(m);ai();}
+function ai(){
+ if(result(S)||S.turn===human)return;busy=true;render();
+ setTimeout(()=>{const m=aiMove(S,+$('lv').value);S=apply(S,m);busy=false;sel=null;finish(m);},550);
+}
+sv.addEventListener('click',e=>{
+ const i=e.target.dataset&&e.target.dataset.i;if(i===undefined||busy||result(S)||S.turn!==human)return;
+ const n=+i,ms=moves(S);
+ if(S.turn==='G'&&S.hand>0){const m=ms.find(m=>m.t===n);if(m)play(m);return;}
+ if(S.b[n]===(S.turn==='G'?GOAT:TIGER)){sel=n;render();return;}
+ const m=ms.find(m=>m.f===sel&&m.t===n);if(m)play(m);
+});
+function start(){S=newState();sel=null;busy=false;last=null;hist=[];render();ai();}
+$('bG').onclick=()=>{human='G';$('bG').className='on';$('bT').className='';start();};
+$('bT').onclick=()=>{human='T';$('bT').className='on';$('bG').className='';start();};
+$('nw').onclick=$('again').onclick=start;
+$('lv').onchange=start;
+$('un').onclick=()=>{if(busy||!hist.length)return;S=hist.pop();sel=null;last=null;render();};
+$('sn').onclick=()=>{snd=!snd;$('sn').textContent=snd?'🔊 Sound':'🔇 Muted';};
+start();
+</script></body></html>
